@@ -1,0 +1,214 @@
+{
+  "id": "excalidraw-mcp-app-tour",
+  "title": "Excalidraw MCP App Tour",
+  "description": "Explore the architecture of an MCP server that streams hand-drawn Excalidraw diagrams as SVG with animations",
+  "version": "1.0.0",
+  "audience": "New Contributors & AI Assistants",
+  "prerequisites": ["Basic TypeScript knowledge", "Familiarity with MCP (Model Context Protocol)"],
+  "steps": [
+    {
+      "id": "step-1-overview",
+      "title": "Project Overview",
+      "description": "Welcome to Excalidraw MCP App! This is a standalone MCP server that streams hand-drawn Excalidraw diagrams as animated SVGs. It supports HTTP (Streamable) and stdio transports, deploys to Vercel, and integrates with Claude Desktop. The codebase is lean — under 2,000 lines of source code — with a clear separation between server logic, rendering, and utilities.",
+      "estimatedTime": 60,
+      "focusDirectory": "",
+      "colorMode": "fileTypes"
+    },
+    {
+      "id": "step-2-core-architecture",
+      "title": "Core Architecture (4 Files)",
+      "description": "The entire application is built on just 4 core files in src/: server.ts defines the MCP tools and cheat sheet, main.ts wires up HTTP and stdio transports, mcp-app.tsx is the React widget that renders SVG with streaming animations, and global.css provides CSS draw-on and fade-in animations plus auto-resize. This tight architecture keeps the codebase simple and focused.",
+      "estimatedTime": 90,
+      "focusDirectory": "src",
+      "highlightLayers": [
+        {
+          "id": "core-files",
+          "name": "Core Architecture",
+          "color": "#3b82f6",
+          "items": [
+            { "path": "src/server.ts", "type": "file" },
+            { "path": "src/main.ts", "type": "file" },
+            { "path": "src/mcp-app.tsx", "type": "file" },
+            { "path": "src/global.css", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        }
+      ],
+      "colorMode": "fileTypes",
+      "interactiveActions": [
+        {
+          "type": "click-file",
+          "description": "Click server.ts to see the MCP tool definitions and cheat sheet",
+          "target": "src/server.ts"
+        }
+      ]
+    },
+    {
+      "id": "step-3-mcp-server",
+      "title": "MCP Server & Tools",
+      "description": "server.ts is the heart of the app — it registers 3 MCP tools: read_me (returns a comprehensive cheat sheet with element format, color palettes, and examples), create_view (takes Excalidraw JSON elements and streams an animated SVG diagram), and export_to_excalidraw (proxies to excalidraw.com). It also serves the HTML widget as a resource. main.ts is the entry point that starts either an HTTP server on port 3001 or a stdio transport for Claude Desktop, based on the --stdio flag.",
+      "estimatedTime": 120,
+      "focusDirectory": "src",
+      "highlightLayers": [
+        {
+          "id": "server-layer",
+          "name": "Server & Transport",
+          "color": "#8b5cf6",
+          "items": [
+            { "path": "src/server.ts", "type": "file" },
+            { "path": "src/main.ts", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        }
+      ],
+      "colorMode": "fileTypes",
+      "interactiveActions": [
+        {
+          "type": "click-file",
+          "description": "Click main.ts to see the transport setup",
+          "target": "src/main.ts"
+        }
+      ]
+    },
+    {
+      "id": "step-4-rendering-pipeline",
+      "title": "SVG Rendering Pipeline",
+      "description": "mcp-app.tsx (738 lines) is the largest file and handles all diagram rendering. During streaming, it parses partial JSON via parsePartialElements(), drops incomplete elements, and uses Excalidraw's exportToSvg() to generate SVGs. morphdom diffs the new SVG against the existing DOM — preserving nodes so only NEW elements trigger CSS animations. global.css provides 3 animation layers: opacity fade-in for shapes, stroke-dashoffset draw-on for lines/arrows, and smooth transitions for property changes. No Excalidraw React canvas is used — it's pure SVG rendering to avoid blinks.",
+      "estimatedTime": 120,
+      "focusDirectory": "src",
+      "highlightLayers": [
+        {
+          "id": "rendering-layer",
+          "name": "Rendering",
+          "color": "#10b981",
+          "items": [
+            { "path": "src/mcp-app.tsx", "type": "file" },
+            { "path": "src/mcp-app.html", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "animation-layer",
+          "name": "Animations & Style",
+          "color": "#f59e0b",
+          "items": [
+            { "path": "src/global.css", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        }
+      ],
+      "colorMode": "fileTypes",
+      "interactiveActions": [
+        {
+          "type": "click-file",
+          "description": "Click mcp-app.tsx to explore the streaming render logic",
+          "target": "src/mcp-app.tsx"
+        }
+      ]
+    },
+    {
+      "id": "step-5-audio-and-state",
+      "title": "Audio Effects & State Persistence",
+      "description": "pencil-audio.ts generates procedural pencil stroke sounds as elements appear during streaming — it randomizes pitch, gain, and offset from a single base64-encoded audio sample in sounds.ts to create natural variety. edit-context.ts manages state persistence for the fullscreen Excalidraw editor: it captures baseline elements, computes diffs, and stores checkpoints in localStorage so user edits survive across calls.",
+      "estimatedTime": 90,
+      "focusDirectory": "src",
+      "highlightLayers": [
+        {
+          "id": "audio-layer",
+          "name": "Audio System",
+          "color": "#ec4899",
+          "items": [
+            { "path": "src/pencil-audio.ts", "type": "file" },
+            { "path": "src/sounds.ts", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "state-layer",
+          "name": "State Management",
+          "color": "#06b6d4",
+          "items": [
+            { "path": "src/edit-context.ts", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        }
+      ],
+      "colorMode": "fileTypes",
+      "interactiveActions": [
+        {
+          "type": "click-file",
+          "description": "Click pencil-audio.ts to see the procedural sound generation",
+          "target": "src/pencil-audio.ts"
+        }
+      ]
+    },
+    {
+      "id": "step-6-build-and-deploy",
+      "title": "Build Pipeline & Deployment",
+      "description": "The build pipeline runs in 4 stages: tsc type-checking, Vite builds the widget into a single-file HTML (mcp-app.html with inlined CSS/JS), then tsc generates server type declarations, and finally Bun bundles server.ts and main.ts into dist/. vite.config.ts externalizes React, Excalidraw, and morphdom to CDN (esm.sh) via import maps. For deployment, api/mcp.ts wraps the server as a Vercel serverless function, and vercel.json configures the routes. manifest.json declares the MCP tools and platform support.",
+      "estimatedTime": 90,
+      "focusDirectory": "",
+      "highlightLayers": [
+        {
+          "id": "config-layer",
+          "name": "Build Config",
+          "color": "#f97316",
+          "items": [
+            { "path": "package.json", "type": "file" },
+            { "path": "tsconfig.json", "type": "file" },
+            { "path": "tsconfig.server.json", "type": "file" },
+            { "path": "vite.config.ts", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        },
+        {
+          "id": "deploy-layer",
+          "name": "Deployment",
+          "color": "#6366f1",
+          "items": [
+            { "path": "api", "type": "directory" },
+            { "path": "vercel.json", "type": "file" },
+            { "path": "manifest.json", "type": "file" }
+          ],
+          "opacity": 0.7,
+          "renderStrategy": "border"
+        }
+      ],
+      "colorMode": "fileTypes",
+      "interactiveActions": [
+        {
+          "type": "hover-directory",
+          "description": "Hover over the api/ directory to see the Vercel serverless handler",
+          "target": "api"
+        }
+      ]
+    },
+    {
+      "id": "step-7-full-picture",
+      "title": "The Full Picture",
+      "description": "That's the complete Excalidraw MCP App! To recap: server.ts defines the MCP tools and cheat sheet, main.ts connects HTTP/stdio transports, mcp-app.tsx renders streaming SVGs with morphdom diffing and CSS animations, and the build pipeline produces a single-file widget plus bundled server. Key design decisions: standard Excalidraw JSON (no extensions), SVG-only rendering (no Excalidraw React canvas), and morphdom for smooth streaming updates. Run 'npm run dev' to start developing!",
+      "estimatedTime": 60,
+      "focusDirectory": "",
+      "colorMode": "fileTypes",
+      "resources": [
+        {
+          "title": "Model Context Protocol",
+          "url": "https://modelcontextprotocol.io",
+          "type": "documentation"
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "author": "Claude",
+    "createdAt": "2026-02-07",
+    "tags": ["onboarding", "architecture", "mcp", "excalidraw"]
+  }
+}
